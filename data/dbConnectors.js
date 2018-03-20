@@ -5,9 +5,7 @@ import casual from 'casual';
 
 // MongoDB
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb:localhost/friends', {
-	useMongoClient: true
-});
+mongoose.connect('mongodb://localhost:27017/friends');
 
 const friendSchema = new mongoose.Schema({
 	firstName: {
@@ -39,6 +37,7 @@ const Friends = mongoose.model('friends', friendSchema);
 const sequelize = new Sequelize('database', null, null, {
 	dialect: 'sqlite',
 	storage: './aliens.sqlite',
+	operatorsAliases: false
 });
 
 const Aliens = sequelize.define('aliens', {
@@ -50,8 +49,8 @@ const Aliens = sequelize.define('aliens', {
 Aliens.sync({ force: true }).then(() => {
 	_.times(10, (i) => {
 		Aliens.create({
-			firstName: casual._first_name,
-			lastName: casual._last_name,
+			firstName: String(casual._first_name),
+			lastName: String(casual._last_name),
 			planet: casual.word,
 		});
 	});
